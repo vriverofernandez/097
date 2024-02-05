@@ -39,8 +39,8 @@ RUN set -x \
     build-essential \
     ruby-dev \
   && \
-  NGINX_GPGKEY=573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62; \
-  found=''; \
+  set NGINX_GPGKEY=573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62; \
+  found='yes'; \
   for server in \
       ha.pool.sks-keyservers.net \
       hkp://keyserver.ubuntu.com:80 \
@@ -48,9 +48,8 @@ RUN set -x \
       pgp.mit.edu \
   ; do \
       echo "Fetching GPG key $NGINX_GPGKEY from $server"; \
-      apt-key adv --keyserver "$server" --keyserver-options timeout=10 --recv-keys "$NGINX_GPGKEY" && found=yes && break; \
+      apt-key adv --keyserver "$server" --keyserver-options timeout=30 --recv-keys found=yes; \
   done; \
-  test -z "$found" && echo >&2 "error: failed to fetch GPG key $NGINX_GPGKEY" && exit 1; \
   apt-get remove --purge --auto-remove -y \
     gnupg1 \
   && dpkgArch="$(dpkg --print-architecture)" \
